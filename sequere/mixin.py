@@ -39,6 +39,11 @@ class SequereMixin(object):
 
         return get_friends(self, *args, **kwargs)
 
+    def is_friend(self, instance):
+        from .models import is_friend
+
+        return is_friend(self, instance)
+
     def get_followers(self, *args, **kwargs):
         from .models import get_followers
 

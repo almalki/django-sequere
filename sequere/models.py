@@ -35,6 +35,10 @@ def get_friends_count(instance, *args, **kwargs):
 
 def get_friends(instance, *args, **kwargs):
     return get_backend()().get_friends(instance, *args, **kwargs)
+    
+
+def is_friend(from_instance, to_instance):
+    return get_backend()().is_friend(from_instance, to_instance)
 
 
 from . import autodiscover

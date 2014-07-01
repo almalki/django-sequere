@@ -146,6 +146,9 @@ class DatabaseBackend(BaseBackend):
 
         return transformer
 
+    def is_friend(self, from_instance, to_instance):
+        return self.is_following(from_instance, to_instance) and self.is_following(to_instance, from_instance)
+
     def get_friends_count(self, instance, identifier=None):
         qs = self.model.objects.from_instance(instance).filter(is_mutual=True)
 

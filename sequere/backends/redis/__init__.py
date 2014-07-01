@@ -200,6 +200,10 @@ class RedisBackend(BaseBackend):
                                        self.get_friends_count(instance, identifier=identifier),
                                        desc=desc)
 
+    def is_friend(self, from_instance, to_instance):
+        return self.client.zrank(self.add_prefix('uid:%s:friends' % self.make_uid(from_instance)),
+                                 '%s' % self.make_uid(to_instance)) is not None
+
     def get_followings(self, instance, desc=True, identifier=None):
         key = 'uid:%s:followings%s' % (self.make_uid(instance),
                                        (':%s' % identifier) if identifier else '')

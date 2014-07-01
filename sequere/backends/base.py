@@ -14,6 +14,9 @@ class BaseBackend(object):
     def is_following(self, from_instance, to_instance):
         raise NotImplemented
 
+    def is_friend(self, from_instance, to_instance):
+        raise NotImplemented
+
     def get_followings_count(self, instance):
         raise NotImplemented
 
