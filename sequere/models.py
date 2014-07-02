@@ -41,6 +41,14 @@ def is_friend(from_instance, to_instance):
     return get_backend()().is_friend(from_instance, to_instance)
 
 
+def get_degree(from_instance, to_instance, *args, **kwargs):
+    return get_backend()().get_degree(from_instance, to_instance)
+
+
+def get_related_friends(instance, degree):
+    return get_backend()().get_related_friends(instance, degree)
+
+
 from . import autodiscover
 
 autodiscover()

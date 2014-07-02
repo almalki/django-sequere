@@ -48,3 +48,13 @@ class SequereMixin(object):
         from .models import get_followers
 
         return get_followers(self, *args, **kwargs)
+
+    def get_degree(self, instance, *args, **kwargs):
+        from .models import get_degree
+
+        return get_degree(self, instance, *args, **kwargs)
+
+    def get_related_friends(self, *args, **kwargs):
+        from .models import get_related_friends
+
+        return get_related_friends(self, *args, **kwargs)

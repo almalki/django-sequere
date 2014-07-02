@@ -23,6 +23,22 @@ class FixturesMixin(Exam):
                                         password='$ecret')
 
     @fixture
+    def user2(self):
+        from ..compat import User
+
+        return User.objects.create_user(username='louisegrandjonc',
+                                        email='louise@ulule.com',
+                                        password='$uperPassword')
+        
+    @fixture
+    def user3(self):
+        from ..compat import User
+
+        return User.objects.create_user(username='brogol',
+                                        email='yohann@ulule.com',
+                                        password='$uperPassword')
+
+    @fixture
     def project(self):
         return Project.objects.create(name='My super project')
 
@@ -176,6 +192,60 @@ class BaseBackendTests(FixturesMixin):
 
         self.assertEqual(content['followings_count'], 0)
         self.assertEqual(content['%s_followings_count' % identifier], 0)
+
+    def test_is_friend(self):
+        from ..models import follow, is_friend
+
+        user = self.user
+        user2 = self.user2
+
+        self.assertFalse(is_friend(user, user2))
+
+        follow(self.user, self.user2)
+        follow(self.user2, self.user)
+
+        self.assertTrue(is_friend(self.user, self.user2))
+
+    def test_get_degree(self):
+        from ..models import follow, get_degree
+
+        user = self.user
+        user2 = self.user2
+        user3 = self.user3
+
+        follow(user, user2)
+        follow(user2, user)
+
+        # Friends
+        self.assertEqual(get_degree(user, user2), 0)
+        # Not friends
+        self.assertEqual(get_degree(user, user3), 3)
+
+        follow(user2, user3)
+        follow(user3, user2)
+
+        self.assertEqual(get_degree(user, user3), 1)
+
+    def test_get_related_friends(self):
+        from ..models import follow, get_related_friends
+
+        user = self.user
+        user2 = self.user2
+        user3 = self.user3
+
+        follow(user, user2)
+        follow(user2, user)
+
+        # Friends
+        self.assertEqual(len(get_related_friends(user, 1)), 0)
+        # Not friends
+
+        follow(user2, user3)
+        follow(user3, user2)
+
+        self.assertEqual(len(get_related_friends(user, 1)), 1)
+
+        self.assertTrue(user3 in get_related_friends(user, 1).keys())
 
 
 @override_settings(SEQUERE_BACKEND_CLASS='sequere.backends.database.DatabaseBackend')

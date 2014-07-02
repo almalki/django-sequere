@@ -263,3 +263,4 @@ class RedisBackend(BaseBackend):
             return int(result)
 
         return 0
+        
