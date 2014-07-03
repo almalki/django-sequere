@@ -26,17 +26,14 @@ class BaseBackend(object):
     def get_recursive_related_friends(self, instance, degree, current_degree, result, initial=None):
         if self.get_friends_count(instance) != 0 and current_degree == degree:
             for friend in dict(self.get_friends(instance).all()).keys():
-                if friend != initial and self.get_degree(friend, initial) == degree:
-                    if friend in result.keys():
-                        result[friend] += 1
-                    else:
-                        result[friend] = 1
+                if friend != initial:
+                    result.append(friend)
         elif current_degree < degree:
             for friend in dict(self.get_friends(instance).all()).keys():
                 self.get_recursive_related_friends(friend, degree, current_degree + 1, result, initial or instance)
 
     def get_related_friends(self, instance, degree):
-        result = {}
+        result = []
         self.get_recursive_related_friends(instance, degree, 0, result)
         return result
 
