@@ -245,7 +245,7 @@ class BaseBackendTests(FixturesMixin):
 
         self.assertEqual(len(get_related_friends(user, 1)), 1)
 
-        self.assertTrue(user3 in get_related_friends(user, 1).keys())
+        self.assertTrue(user3 in get_related_friends(user, 1))
 
 
 @override_settings(SEQUERE_BACKEND_CLASS='sequere.backends.database.DatabaseBackend')
