@@ -60,3 +60,20 @@ class RedisQuerySetTransformer(QuerySetTransformer):
                     orders[result] = created
 
             return sorted(orders.items(), key=itemgetter(1), reverse=self.desc)
+
+    def get_ids(self, qs):
+        objects_id = []
+
+        scores = self.method(*self.pieces,
+                             start=self.start,
+                             num=self.stop - self.start,
+                             withscores=True)
+
+        with self.qs.pipeline() as pipe:
+            for uid, score in scores:
+                pipe.hgetall('%suid:%s' % (self.prefix, uid))
+
+            for i, value in enumerate(pipe.execute()):
+                objects_id.append(int(value['object_id']))
+
+        return objects_id

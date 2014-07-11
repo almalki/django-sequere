@@ -62,3 +62,13 @@ class DatabaseQuerySetTransformer(QuerySetTransformer):
                 orders[result] = created
 
         return sorted(orders.items(), key=itemgetter(1), reverse=self.desc)
+
+    def get_ids(self, qs):
+        values = qs[self.start:self.stop].values(*self.keys)
+
+        objects_ids = []
+
+        for value in values:
+            objects_ids.append(value[self.pivot_key])
+
+        return objects_ids

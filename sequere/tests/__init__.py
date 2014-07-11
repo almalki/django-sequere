@@ -134,6 +134,15 @@ class BaseBackendTests(FixturesMixin):
 
         self.assertIn(self.project, dict(qs.all()))
 
+    def test_get_followings_ids(self):
+        from ..models import follow, get_followings
+
+        follow(self.user, self.project)
+
+        list_ids = get_followings(self.user).all_ids()
+
+        self.assertIn(self.project.id, list_ids)
+
     def test_follow_view(self):
         user = self.user
 

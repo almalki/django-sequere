@@ -44,3 +44,7 @@ class QuerySetTransformer(object):
     def all(self):
         self.set_limits(0, self.count())
         return self.transform(self.qs)
+
+    def all_ids(self):
+        self.set_limits(0, self.count())
+        return self.get_ids(self.qs)
